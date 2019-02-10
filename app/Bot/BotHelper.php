@@ -91,7 +91,7 @@ class BotHelper {
         $isReply = is_object($update->getMessage()->getReplyToMessage());
         $replyId = $isReply ? $update->getMessage()->getReplyToMessage()->getMessageId() : $update->getMessage()->getMessageId();
 
-        if(starts_with($text, '!report')){
+        if (starts_with($text, '!report')) {
             $this->telegram->deleteMessage([
                 'chat_id' => $update->getMessage()->getChat()->getId(),
                 'message_id'=> $update->getMessage()->getMessageId(),
@@ -104,7 +104,7 @@ class BotHelper {
                     'message_id' => $replyId,
                 ]);
             }
-        } elseif (starts_with($text, '!remove')){
+        } elseif (starts_with($text, '!remove')) {
             $adminIds = explode(',', env('BOT_ADMIN_IDS'));
             $fromId = $update->getMessage()->getFrom()->getId();
             if(in_array($fromId, $adminIds)){
@@ -120,8 +120,7 @@ class BotHelper {
                     'message_id'=> $update->getMessage()->getMessageId(),
                 ]);
             }
-        }
-        elseif (starts_with($text, '!')){
+        } elseif (starts_with($text, '!')) {
             $command = mb_substr($text, 1);
             $command = trim($command);
             $command = strtolower($command);
@@ -135,12 +134,11 @@ class BotHelper {
                     'text' => file_get_contents($path),
                 ]);
             }
-        }
-        if (
+        } elseif (
             strpos($text, 'ابنتو') !== false ||
             strpos($text, 'ابونتو') !== false ||
             strpos($text, 'اوبنتو') !== false
-        ){
+        ) {
             $this->telegram->sendMessage([
                 'chat_id' => $update->getMessage()->getChat()->getId(),
                 'reply_to_message_id' => $update->getMessage()->getMessageId(),
