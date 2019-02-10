@@ -29,9 +29,31 @@ class BotHelper {
                 $this->parseGroupText($update);
             }
         }else if($isInPrivate){
-            //TODO: Respond to some commands like ping
+            if ($messageType == 'text') {
+                $this->parsePrivateText($update);
+            }
         }else{
             //TODO: Leave from this group or what?
+        }
+    }
+
+    public function parsePrivateText(Update $update)
+    {
+        /*
+            ping - Ping
+            id - Showing your unique Telegram ID
+            rules - Showing the rules of the group
+            link - Showing the group information URL on Forum
+            help - Showing this message
+         */
+        $chatId = $update->getMessage()->getChat()->getId();
+        $text   = $update->getMessage()->getText();
+
+        if(starts_with($text, 'ping')) {
+            $this->telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => 'pong',
+            ]);
         }
     }
 
