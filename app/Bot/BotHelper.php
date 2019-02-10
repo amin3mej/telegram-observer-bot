@@ -39,22 +39,45 @@ class BotHelper {
 
     public function parsePrivateText(Update $update)
     {
-        /*
-            ping - Ping
-            id - Showing your unique Telegram ID
-            rules - Showing the rules of the group
-            link - Showing the group information URL on Forum
-            help - Showing this message
-         */
         $chatId = $update->getMessage()->getChat()->getId();
         $text   = $update->getMessage()->getText();
 
-        if(starts_with($text, 'ping')) {
+        if (starts_with($text, 'ping')) {
             $this->telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => 'pong',
             ]);
+        } elseif (starts_with($text, 'id')) {
+            $this->telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => 'Your ID is: ' . $chatId,
+            ]);
+        } elseif (starts_with($text, 'help')) {
+            $this->telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => file_get_contents(base_path('responses/help.md')),
+            ]);
+        } elseif (starts_with($text, 'link')) {
+            $this->telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => file_get_contents(base_path('responses/link.md')),
+            ]);
+        } elseif (starts_with($text, 'rules')) {
+            $this->telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => file_get_contents(base_path('responses/rules.md')),
+            ]);
+        } else {
+            $this->telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => 'Incorrect command!',
+            ]);
+            $this->telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => file_get_contents(base_path('responses/help.md')),
+            ]);
         }
+
     }
 
     public function parseGroupText(Update $update)
@@ -84,7 +107,7 @@ class BotHelper {
             $command = trim($command);
             $command = strtolower($command);
 
-            $path = base_path('answers/' . $command . '.md');
+            $path = base_path('responses/answers/' . $command . '.md');
             if(file_exists($path)){
                 $this->telegram->sendMessage([
                     'chat_id' => $update->getMessage()->getChat()->getId(),
