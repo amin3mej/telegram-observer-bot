@@ -1,0 +1,1 @@
+https://mahak-charity.org/main/index.php/fa/about-mahak/payments

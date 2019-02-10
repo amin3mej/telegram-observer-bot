@@ -104,7 +104,24 @@ class BotHelper {
                     'message_id' => $replyId,
                 ]);
             }
-        } elseif (starts_with($text, '!')){
+        } elseif (starts_with($text, '!remove')){
+            $adminIds = explode(',', env('BOT_ADMIN_IDS'));
+            $fromId = $update->getMessage()->getFrom()->getId();
+            if(in_array($fromId, $adminIds)){
+                if($isReply)
+                {
+                    $this->telegram->deleteMessage([
+                        'chat_id' => $update->getMessage()->getChat()->getId(),
+                        'message_id'=> $replyId,
+                    ]);
+                }
+                $this->telegram->deleteMessage([
+                    'chat_id' => $update->getMessage()->getChat()->getId(),
+                    'message_id'=> $update->getMessage()->getMessageId(),
+                ]);
+            }
+        }
+        elseif (starts_with($text, '!')){
             $command = mb_substr($text, 1);
             $command = trim($command);
             $command = strtolower($command);
@@ -119,7 +136,6 @@ class BotHelper {
                 ]);
             }
         }
-
         if (
             strpos($text, 'ابنتو') !== false ||
             strpos($text, 'ابونتو') !== false ||
