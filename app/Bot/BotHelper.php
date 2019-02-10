@@ -20,6 +20,10 @@ class BotHelper {
 
     public function parse(Update $update)
     {
+        // Skip updates like edited message event
+        if(!$update->getMessage())
+            return;
+
         $messageType = $this->telegram->detectMessageType($update);
         $isInGroup = $update->getMessage()->getChat()->getId() == env('BOT_GROUP_ID');
         $isInPrivate = $update->getMessage()->getChat()->getType() === 'private';
@@ -100,10 +104,8 @@ class BotHelper {
                     'message_id' => $replyId,
                 ]);
             }
-        }
-
-        if(starts_with($text, '!faq')){
-            $command = mb_substr($text, 4);
+        } elseif (starts_with($text, '!')){
+            $command = mb_substr($text, 1);
             $command = trim($command);
             $command = strtolower($command);
 
@@ -115,14 +117,7 @@ class BotHelper {
                     'reply_to_message_id' => $replyId,
                     'text' => file_get_contents($path),
                 ]);
-            }else{
-                $this->telegram->sendMessage([
-                    'chat_id' => $update->getMessage()->getChat()->getId(),
-                    'reply_to_message_id' => $replyId,
-                    'text' => 'Incorrect Command!',
-                ]);
             }
-
         }
 
         if (
