@@ -15,4 +15,10 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('bot[/{getMe}]', 'BotController@index');
+$router->get('bot/set-webhook', 'BotController@setWebhook');
+$router->get('bot/remove-webhook', 'BotController@removeWebhook');
+$router->get('bot/webhook', [
+    'as' => 'webhook',
+    'uses' => 'BotController@webhook',
+]);
+$router->get('bot', 'BotController@index');
