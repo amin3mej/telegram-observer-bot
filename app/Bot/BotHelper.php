@@ -123,7 +123,7 @@ class BotHelper {
         if (
             strpos($text, 'ابنتو') !== false ||
             strpos($text, 'ابونتو') !== false ||
-            strpos($text, 'ابونتو') !== false
+            strpos($text, 'اوبنتو') !== false
         ){
             $this->telegram->sendMessage([
                 'chat_id' => $update->getMessage()->getChat()->getId(),
