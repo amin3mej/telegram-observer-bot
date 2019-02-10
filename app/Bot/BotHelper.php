@@ -124,6 +124,18 @@ class BotHelper {
             }
 
         }
+
+        if (
+            strpos($text, 'ابنتو') !== false ||
+            strpos($text, 'ابونتو') !== false ||
+            strpos($text, 'ابونتو') !== false
+        ){
+            $this->telegram->sendMessage([
+                'chat_id' => $update->getMessage()->getChat()->getId(),
+                'reply_to_message_id' => $update->getMessage()->getMessageId(),
+                'text' => 'اوبونتو*',
+            ]);
+        }
     }
 
     public function parseNewMember(Update $update)
