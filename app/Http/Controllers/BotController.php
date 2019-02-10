@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bot\BotHelper;
-use Telegram\Bot\Api as Telegram;
+use App\Bot\Api as Telegram;
 
 class BotController extends Controller
 {
@@ -28,7 +28,6 @@ class BotController extends Controller
             $id = $update->getUpdateId();
             $helper->parse($update);
         }
-
         file_put_contents($tempFile, $id);
         return 'Done';
     }

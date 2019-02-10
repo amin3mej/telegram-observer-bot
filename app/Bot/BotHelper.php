@@ -1,7 +1,6 @@
 <?php
 namespace App\Bot;
 
-use Telegram\Bot\Api;
 use Telegram\Bot\Objects\Update;
 
 /**
@@ -21,12 +20,12 @@ class BotHelper {
 
     public function parse(Update $update)
     {
-        $text = $update->getMessage()->getText();
+        $messageType = $this->telegram->detectMessageType($update);
         $isInGroup = $update->getMessage()->getChat()->getId() == env('BOT_GROUP_ID');
         $isInPrivate = $update->getMessage()->getChat()->getType() === 'private';
 
         if($isInGroup) {
-            if ($text) {
+            if ($messageType == 'text') {
                 $this->parseGroupText($update);
             }
         }else if($isInPrivate){
@@ -40,17 +39,28 @@ class BotHelper {
     {
         $text = $update->getMessage()->getText();
 
+        $isReply = is_object($update->getMessage()->getReplyToMessage());
+        $replyId = $isReply ? $update->getMessage()->getReplyToMessage()->getMessageId() : $update->getMessage()->getMessageId();
+
         if(starts_with($text, '!report')){
-            //TODO: Forward message to admins
+            $this->telegram->deleteMessage([
+                'chat_id' => $update->getMessage()->getChat()->getId(),
+                'message_id'=> $update->getMessage()->getMessageId(),
+            ]);
+            $ids = explode(',', env('BOT_ADMIN_IDS'));
+            foreach ($ids as $id){
+                $this->telegram->forwardMessage([
+                    'chat_id' => $id,
+                    'from_chat_id' => $update->getMessage()->getChat()->getId(),
+                    'message_id' => $replyId,
+                ]);
+            }
         }
 
         if(starts_with($text, '!faq')){
             $command = mb_substr($text, 4);
             $command = trim($command);
             $command = strtolower($command);
-
-            $isReply = is_object($update->getMessage()->getReplyToMessage());
-            $replyId = $isReply ? $update->getMessage()->getReplyToMessage()->getMessageId() : $update->getMessage()->getMessageId();
 
             $path = base_path('answers/' . $command . '.md');
             if(file_exists($path)){

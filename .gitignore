@@ -1,5 +1,6 @@
 /vendor
 /.idea
+/storage/latestProcessedId.txt
 Homestead.json
 Homestead.yaml
 .env
