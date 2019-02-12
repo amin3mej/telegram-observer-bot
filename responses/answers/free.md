@@ -1,1 +1,1 @@
-https://wiki.ubuntu.ir/wiki/Free\_software
+https://telegra.ph/%D9%86%D8%B1%D9%85%E2%80%8C%D8%A7%D9%81%D8%B2%D8%A7%D8%B1-%D8%A2%D8%B2%D8%A7%D8%AF-02-12

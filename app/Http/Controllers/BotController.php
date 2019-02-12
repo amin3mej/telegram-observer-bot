@@ -27,7 +27,9 @@ class BotController extends Controller
 
         foreach ($updates as $update) {
             $id = $update->getUpdateId();
-            $helper->parse($update);
+            //try{
+                $helper->parse($update);
+            //}catch(\Exception $e){}
         }
 
         file_put_contents($tempFile, $id);
