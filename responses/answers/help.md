@@ -1,13 +1,38 @@
-!report - Report the message which was replied on to moderators
-!farsi - Showing the message about writing with persian letters
-!smart - Showing the link of "How To Ask Questions The Smart Way"
-!hacker - Showing the link of "How To Become A Hacker"
-!bitcoin - Showing the link of Bitcoin FAQ
-!lamp - Showing the command to install LAMP
-!grub - Showing the link of "How to recover GRUB"
-!ask - Showing the message about not asking to ask
-!kali - Showing the message about using a reasonable distro
-!flood - Showing the message about not flooding the group
-!xampp - Showing the message about not using XAMPP and using LAMP instead
-!searx - Showing the Wiki link of searx
-!free - Showing the Wiki link of Free software
+!report :
+گزارش پیام به ادمین‌ها
+
+!farsi :
+نمایش پیغام مربوط به فارسی نوشتن
+
+!smart :
+نمایش پیوند «چگونه هوشمندانه سوال بپرسیم» به کاربر
+
+!hacker :
+نمایش پیوند «چگونه حکر شویم» به کاربر
+
+!bitcoin :
+نمایش لینک مربوط به پرسش و پاسخ در بیت‌کوین
+
+!lamp :
+نمایش دستور نصب LAMP به کاربر
+
+!grub :
+نمایش پیوند «چگونه GRUB را بازنمایی کنیم» به کاربر
+
+!ask :
+نمایش پیغام «سوال نپرسیم که سوال بپرسیم» به کاربر
+
+!kali :
+نمایش پیغام مربوط به استفاده از توزیع کالی
+
+!flood :
+نمایش پیغام مربوط به ارسال متن‌ها در یک پیام
+
+!xampp :
+نمایش پیغام مربوط به عدم استفاده از XAMPP و توصیه برای استفاده از LAMP
+
+!searx :
+نشان دادن لینک ویکی searx به کاربر
+
+!free :
+نشان دادن لینک ویکی نرم‌افزار‌آزاد
