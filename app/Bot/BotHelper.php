@@ -136,16 +136,18 @@ class BotHelper {
                 ]);
             }
         } elseif (
-            strpos($text, 'ابنتو') !== false ||
-            strpos($text, 'ابونتو') !== false ||
-            strpos($text, 'اوبنتو') !== false
+            strpos($text, 'اوبونتو') === false &&
+            (
+                strpos($text, 'ابنتو') !== false ||
+                strpos($text, 'ابونتو') !== false ||
+                strpos($text, 'اوبنتو') !== false
+            )
         ) {
-            if (!strpos($text, 'اوبونتو') !== false) {
-             $this->telegram->sendMessage([
-                 'chat_id' => $update->getMessage()->getChat()->getId(),
-                 'reply_to_message_id' => $update->getMessage()->getMessageId(),
-                 'text' => 'اوبونتو*',
-               ]); }
+            $this->telegram->sendMessage([
+                'chat_id' => $update->getMessage()->getChat()->getId(),
+                'reply_to_message_id' => $update->getMessage()->getMessageId(),
+                'text' => 'اوبونتو*',
+            ]);
         }
     }
 
