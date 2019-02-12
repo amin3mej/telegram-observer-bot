@@ -25,16 +25,17 @@ class BotHelper {
             return;
 
         $messageType = $this->telegram->detectMessageType($update);
-        $isInGroup = $update->getMessage()->getChat()->getId() == env('BOT_GROUP_ID');
         $isInPrivate = $update->getMessage()->getChat()->getType() === 'private';
+        $isInGroup = $update->getMessage()->getChat()->getType() === 'supergroup'; 
+        // $isInGroup = $update->getMessage()->getChat()->getId() == env('BOT_GROUP_ID');
 
-        if($isInGroup) {
-            if ($messageType == 'text') {
-                $this->parseGroupText($update);
-            }
-        }else if($isInPrivate){
+        if($isInPrivate){
             if ($messageType == 'text') {
                 $this->parsePrivateText($update);
+            }
+        }else if($isInGroup) {
+            if ($messageType == 'text') {
+                $this->parseGroupText($update);
             }
         }else{
             //TODO: Leave from this group or what?
