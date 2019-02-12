@@ -23,7 +23,7 @@ class BotController extends Controller
         if(file_exists($tempFile))
             $id = file_get_contents($tempFile);
 
-        $updates = $telegram->getUpdates(['offset' => $id + 1]);
+        $updates = $telegram->getUpdates(['offset' => $id + 1, 'limit' => 100000]);
 
         foreach ($updates as $update) {
             $id = $update->getUpdateId();
