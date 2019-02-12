@@ -139,11 +139,12 @@ class BotHelper {
             strpos($text, 'ابونتو') !== false ||
             strpos($text, 'اوبنتو') !== false
         ) {
-            $this->telegram->sendMessage([
-                'chat_id' => $update->getMessage()->getChat()->getId(),
-                'reply_to_message_id' => $update->getMessage()->getMessageId(),
-                'text' => 'اوبونتو*',
-            ]);
+            if (!strpos($text, 'اوبونتو') !== false) {
+             $this->telegram->sendMessage([
+                 'chat_id' => $update->getMessage()->getChat()->getId(),
+                 'reply_to_message_id' => $update->getMessage()->getMessageId(),
+                 'text' => 'اوبونتو*',
+               ]); }
         }
     }
 
