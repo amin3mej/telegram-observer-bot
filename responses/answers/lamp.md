@@ -1,1 +1,1 @@
-sudo apt install lamp-server^
+`sudo apt install lamp-server^`
