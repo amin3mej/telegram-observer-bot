@@ -1,1 +1,1 @@
-https://wiki.ubuntu.ir/wiki/Smart_Questions
+https://wiki.ubuntu.ir/wiki/Smart\_Questions
