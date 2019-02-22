@@ -37,6 +37,8 @@ class BotHelper {
         }else if($isInGroup) {
             if ($messageType == 'text') {
                 $this->parseGroupText($update);
+            } else {
+                $this->parseGroupEvents($update);
             }
         }else{
             //TODO: Leave from this group or what?
@@ -88,6 +90,13 @@ class BotHelper {
         $isReply = is_object($update->getMessage()->getReplyToMessage());
         $replyId = $isReply ? $update->getMessage()->getReplyToMessage()->getMessageId() : $update->getMessage()->getMessageId();
 
+        if($update->getMessage()->getFrom()->getIsBot()){
+            $this->telegram->deleteMessage([
+                'chat_id' => $update->getMessage()->getChat()->getId(),
+                'message_id' => $update->getMessage()->getMessageId(),
+            ]);
+        }
+
         if (starts_with($text, '!report')) {
             $this->telegram->deleteMessage([
                 'chat_id' => $update->getMessage()->getChat()->getId(),
@@ -112,7 +121,7 @@ class BotHelper {
                 return null;
             });
 
-            if($link){
+            if ($link) {
                 $this->telegram->sendMessage([
                     'chat_id' => $update->getMessage()->getChat()->getId(),
                     'reply_to_message_id' => $replyId,
@@ -165,8 +174,50 @@ class BotHelper {
         }
     }
 
-    public function parseNewMember(Update $update)
+    public function parseGroupEvents(Update $update)
     {
-        //TODO: check for new user is a spammer bot or not.
+        if(isset($update->getMessage()['left_chat_member'])){
+            //If i kick a person, delete the message.
+            if(isset($update->getMessage()['from']['username']) && $update->getMessage()['from']['username'] == env('BOT_USERNAME')){
+                try {
+                    $this->telegram->deleteMessage([
+                        'chat_id' => $update->getMessage()->getChat()->getId(),
+                        'message_id' => $update->getMessage()->getMessageId(),
+                    ]);
+                }catch (\Exception $exception){
+                    // Maybe this user is left or have admin permission.
+                }
+            }
+        }
+        //Check if new chat member added
+        if(isset($update->getMessage()['new_chat_members'])) {
+            $newChatMembers = $update->getMessage()['new_chat_members'];
+
+            /** @var boolean $flag is there any bot added in this update? */
+            $flag = false;
+            foreach ($newChatMembers as $newChatMember) {
+                if ($newChatMember['is_bot']) {
+                    $flag = true;
+                    break;
+                }
+            }
+            try {
+                $this->telegram->kickChatMember([
+                    'chat_id' => $update->getMessage()->getChat()->getId(),
+                    'user_id' => $update->getMessage()->getFrom()->getId(),
+                ]);
+            }catch (\Exception $exception){
+                // Maybe this user is left or have admin permission.
+            }
+
+            if ($flag) {
+                foreach ($newChatMembers as $newChatMember) {
+                    $this->telegram->kickChatMember([
+                        'chat_id' => $update->getMessage()->getChat()->getId(),
+                        'user_id' => $newChatMember['id'],
+                    ]);
+                }
+            }
+        }
     }
 }
