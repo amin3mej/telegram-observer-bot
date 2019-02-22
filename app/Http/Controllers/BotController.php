@@ -27,9 +27,9 @@ class BotController extends Controller
 
         foreach ($updates as $update) {
             $id = $update->getUpdateId();
-            //try{
+            try{
                 $helper->parse($update);
-            //}catch(\Exception $e){}
+            }catch(\Exception $e){}
         }
 
         file_put_contents($tempFile, $id);
@@ -42,7 +42,11 @@ class BotController extends Controller
         $helper = new BotHelper($telegram);
 
         $update = $telegram->getWebhookUpdates();
-        $helper->parse($update);
+        try{
+            $helper->parse($update);
+        }catch(\Exception $e){
+            
+        }
     }
 
     public function setWebhook(Request $request)

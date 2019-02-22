@@ -17,7 +17,7 @@ $router->get('/', function () use ($router) {
 
 $router->get('bot/set-webhook', 'BotController@setWebhook');
 $router->get('bot/remove-webhook', 'BotController@removeWebhook');
-$router->get('bot/webhook', [
+$router->post('bot/webhook', [
     'as' => 'webhook',
     'uses' => 'BotController@webhook',
 ]);

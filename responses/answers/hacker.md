@@ -1,1 +1,1 @@
-http://linuxbook.ir/chapters/being_hacker.html
+http://linuxbook.ir/chapters/being\_hacker.html
