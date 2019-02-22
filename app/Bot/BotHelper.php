@@ -104,11 +104,15 @@ class BotHelper {
             ]);
             $ids = explode(',', env('BOT_ADMIN_IDS'));
             foreach ($ids as $id) {
-                $this->telegram->forwardMessage([
-                    'chat_id' => $id,
-                    'from_chat_id' => $update->getMessage()->getChat()->getId(),
-                    'message_id' => $replyId,
-                ]);
+                try {
+                    $this->telegram->forwardMessage([
+                        'chat_id' => $id,
+                        'from_chat_id' => $update->getMessage()->getChat()->getId(),
+                        'message_id' => $replyId,
+                    ]);
+                }catch (\Exception $exception){
+
+                }
             }
         } elseif (starts_with($text, '!link')) {
             $link = Cache::remember('joinLinkFor' . $update->getMessage()->getChat()->getId(), 180, function () use ($update) {
