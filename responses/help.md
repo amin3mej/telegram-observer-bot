@@ -1,4 +1,4 @@
-Telegram Observer Bot v0.1 - Copyright 2018
+Telegram Observer Bot v0.2 - Copyright 2018
 
 Commands:
 ping - Ping

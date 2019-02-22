@@ -1,6 +1,7 @@
 <?php
 namespace App\Bot;
 
+use Illuminate\Support\Facades\Cache;
 use Telegram\Bot\Objects\Update;
 
 /**
@@ -62,11 +63,6 @@ class BotHelper {
                 'chat_id' => $chatId,
                 'text' => file_get_contents(base_path('responses/help.md')),
             ]);
-        } elseif (starts_with($text, 'link')) {
-            $this->telegram->sendMessage([
-                'chat_id' => $chatId,
-                'text' => file_get_contents(base_path('responses/link.md')),
-            ]);
         } elseif (starts_with($text, 'rules')) {
             $this->telegram->sendMessage([
                 'chat_id' => $chatId,
@@ -95,14 +91,32 @@ class BotHelper {
         if (starts_with($text, '!report')) {
             $this->telegram->deleteMessage([
                 'chat_id' => $update->getMessage()->getChat()->getId(),
-                'message_id'=> $update->getMessage()->getMessageId(),
+                'message_id' => $update->getMessage()->getMessageId(),
             ]);
             $ids = explode(',', env('BOT_ADMIN_IDS'));
-            foreach ($ids as $id){
+            foreach ($ids as $id) {
                 $this->telegram->forwardMessage([
                     'chat_id' => $id,
                     'from_chat_id' => $update->getMessage()->getChat()->getId(),
                     'message_id' => $replyId,
+                ]);
+            }
+        } elseif (starts_with($text, '!link')) {
+            $link = Cache::remember('joinLinkFor' . $update->getMessage()->getChat()->getId(), 180, function () use ($update) {
+                $link = $this->telegram->exportChatInviteLink([
+                    'chat_id' => $update->getMessage()->getChat()->getId(),
+                ]);
+                if ($link['ok']) {
+                    return $link['result'];
+                }
+                return null;
+            });
+
+            if($link){
+                $this->telegram->sendMessage([
+                    'chat_id' => $update->getMessage()->getChat()->getId(),
+                    'reply_to_message_id' => $replyId,
+                    'text' => sprintf(file_get_contents(base_path('responses/link.md')), $link),
                 ]);
             }
         } elseif (starts_with($text, '!remove')) {
