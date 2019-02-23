@@ -205,16 +205,16 @@ class BotHelper {
                     break;
                 }
             }
-            try {
-                $this->telegram->kickChatMember([
-                    'chat_id' => $update->getMessage()->getChat()->getId(),
-                    'user_id' => $update->getMessage()->getFrom()->getId(),
-                ]);
-            }catch (\Exception $exception){
-                // Maybe this user is left or have admin permission.
-            }
 
             if ($flag) {
+                try {
+                    $this->telegram->kickChatMember([
+                        'chat_id' => $update->getMessage()->getChat()->getId(),
+                        'user_id' => $update->getMessage()->getFrom()->getId(),
+                    ]);
+                }catch (\Exception $exception){
+                    // Maybe this user is left or have admin permission.
+                }
                 foreach ($newChatMembers as $newChatMember) {
                     $this->telegram->kickChatMember([
                         'chat_id' => $update->getMessage()->getChat()->getId(),
