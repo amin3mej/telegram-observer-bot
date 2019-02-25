@@ -197,6 +197,14 @@ class BotHelper {
         if(isset($update->getMessage()['new_chat_members'])) {
             $newChatMembers = $update->getMessage()['new_chat_members'];
 
+            if(count($newChatMembers) == 1 && $update->getMessage()->getFrom()->getId() == $newChatMembers[0]['id']){
+                // Username joined the group.
+                $this->telegram->deleteMessage([
+                    'chat_id' => $update->getMessage()->getChat()->getId(),
+                    'message_id' => $update->getMessage()->getMessageId(),
+                ]);
+            }
+
             /** @var boolean $flag is there any bot added in this update? */
             $flag = false;
             foreach ($newChatMembers as $newChatMember) {
