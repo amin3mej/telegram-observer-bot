@@ -181,7 +181,11 @@ class BotHelper {
             (
                 strpos($text, 'ریعکت') !== false ||
                 strpos($text, 'ری اکت') !== false ||
-                strpos($text, 'ریاکت') !== false
+                strpos($text, 'ریاکت') !== false ||
+                // with arabic "ي" charecher
+                strpos($text, 'ريعکت') !== false ||
+                strpos($text, 'ري اکت') !== false ||
+                strpos($text, 'رياکت') !== false
             )
         ) {
             $this->telegram->sendMessage([
