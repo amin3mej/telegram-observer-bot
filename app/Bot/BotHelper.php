@@ -175,6 +175,19 @@ class BotHelper {
                 'reply_to_message_id' => $update->getMessage()->getMessageId(),
                 'text' => 'اوبونتو*',
             ]);
+        //
+        } elseif (
+            strpos($text, 'ری اکت') === false &&
+            (
+                strpos($text, 'ریعکت') !== false ||
+                strpos($text, 'ریاکت') !== false
+            )
+        ) {
+            $this->telegram->sendMessage([
+                'chat_id' => $update->getMessage()->getChat()->getId(),
+                'reply_to_message_id' => $update->getMessage()->getMessageId(),
+                'text' => 'ری اکت*',
+            ]);
         }
     }
 
