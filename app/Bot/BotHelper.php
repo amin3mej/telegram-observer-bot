@@ -187,7 +187,7 @@ class BotHelper {
             $this->telegram->sendMessage([
                 'chat_id' => $update->getMessage()->getChat()->getId(),
                 'reply_to_message_id' => $update->getMessage()->getMessageId(),
-                'text' => 'ری اکت*',
+                'text' => 'ری‌اکت*',
             ]);
         }
     }
