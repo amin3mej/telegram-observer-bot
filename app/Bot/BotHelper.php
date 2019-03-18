@@ -177,9 +177,10 @@ class BotHelper {
             ]);
         //
         } elseif (
-            strpos($text, 'ری اکت') === false &&
+            strpos($text, 'ری‌اکت') === false &&
             (
                 strpos($text, 'ریعکت') !== false ||
+                strpos($text, 'ری اکت') !== false ||
                 strpos($text, 'ریاکت') !== false
             )
         ) {
