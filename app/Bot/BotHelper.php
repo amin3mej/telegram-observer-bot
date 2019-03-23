@@ -175,24 +175,6 @@ class BotHelper {
                 'reply_to_message_id' => $update->getMessage()->getMessageId(),
                 'text' => 'اوبونتو*',
             ]);
-        //
-        } elseif (
-            strpos($text, 'ری‌اکت') === false &&
-            (
-                strpos($text, 'ریعکت') !== false ||
-                strpos($text, 'ری اکت') !== false ||
-                strpos($text, 'ریاکت') !== false ||
-                // with arabic "ي" charecher
-                strpos($text, 'ريعکت') !== false ||
-                strpos($text, 'ري اکت') !== false ||
-                strpos($text, 'رياکت') !== false
-            )
-        ) {
-            $this->telegram->sendMessage([
-                'chat_id' => $update->getMessage()->getChat()->getId(),
-                'reply_to_message_id' => $update->getMessage()->getMessageId(),
-                'text' => 'ری‌اکت*',
-            ]);
         }
     }
 
