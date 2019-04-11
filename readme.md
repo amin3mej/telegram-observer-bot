@@ -4,9 +4,9 @@
 
 # How to Install
 
-1- `git clone https://github.com/aminemej/telegram-observer-bot --depth=1`
-2- `composer install`
+  1. ` $ git clone https://github.com/aminemej/telegram-observer-bot --depth=1 `
+  2. ` $ composer install `
 
 # Requirments
 
-* php 7 or higher
+  * PHP (=>7.0.0)
