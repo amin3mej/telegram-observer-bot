@@ -5,6 +5,7 @@
 # How to Install
 
 1- `git clone https://github.com/aminemej/telegram-observer-bot --depth=1`
+
 2- `composer install`
 
 # Requirments
