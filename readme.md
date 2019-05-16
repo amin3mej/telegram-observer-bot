@@ -10,4 +10,4 @@
 
 # Requirments
 
-* php 7 or higher
+  * PHP (=>7.0.0)
