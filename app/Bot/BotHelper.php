@@ -37,6 +37,8 @@ class BotHelper {
         }else if($isInGroup) {
             if ($messageType == 'text') {
                 $this->parseGroupText($update);
+            } elseif ($messageType == 'document') {
+                $this->parseGroupAttachment($update);
             } else {
                 $this->parseGroupEvents($update);
             }
@@ -177,6 +179,30 @@ class BotHelper {
             ]);
         }
     }
+
+    public function parseGroupAttachment(Update $update)
+    {
+        $filename = $update->getMessage()->getDocument()->getFileName();
+        if (substr($filename, -4) === '.apk') {
+            try{
+                $this->telegram->deleteMessage([
+                    'chat_id' => $update->getMessage()->getChat()->getId(),
+                    'message_id' => $update->getMessage()->getMessageId(),
+                ]);
+            }catch (\Exception $exception){
+                // Maybe message was deleted before any action.
+            }
+            try {
+                $this->telegram->kickChatMember([
+                    'chat_id' => $update->getMessage()->getChat()->getId(),
+                    'user_id' => $update->getMessage()->getFrom()->getId(),
+                ]);
+            }catch (\Exception $exception){
+                // Maybe the user did left or had admin permission.
+            }
+        }
+    }
+
 
     public function parseGroupEvents(Update $update)
     {
