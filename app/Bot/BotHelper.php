@@ -100,13 +100,14 @@ class BotHelper {
         }
 
         if (starts_with($text, '!report')) {
-            $this->telegram->deleteMessage([
-                'chat_id' => $update->getMessage()->getChat()->getId(),
-                'message_id' => $update->getMessage()->getMessageId(),
-            ]);
             $ids = explode(',', env('BOT_ADMIN_IDS'));
             foreach ($ids as $id) {
                 try {
+                    $this->telegram->forwardMessage([
+                        'chat_id' => $id,
+                        'from_chat_id' => $update->getMessage()->getChat()->getId(),
+                        'message_id' => $update->getMessage()->getMessageId(),
+                    ]);
                     $this->telegram->forwardMessage([
                         'chat_id' => $id,
                         'from_chat_id' => $update->getMessage()->getChat()->getId(),
@@ -116,6 +117,10 @@ class BotHelper {
 
                 }
             }
+            $this->telegram->deleteMessage([
+                'chat_id' => $update->getMessage()->getChat()->getId(),
+                'message_id' => $update->getMessage()->getMessageId(),
+            ]);
         } elseif (starts_with($text, '!link')) {
             $link = Cache::remember('joinLinkFor' . $update->getMessage()->getChat()->getId(), 180, function () use ($update) {
                 $link = $this->telegram->exportChatInviteLink([
