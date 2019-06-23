@@ -188,7 +188,10 @@ class BotHelper {
     public function parseGroupAttachment(Update $update)
     {
         $filename = $update->getMessage()->getDocument()->getFileName();
-        if (substr($filename, -4) === '.apk') {
+        $adminIds = explode(',', env('BOT_ADMIN_IDS'));
+        $fromId = $update->getMessage()->getFrom()->getId();
+        
+        if (substr($filename, -4) === '.apk' && ! in_array($fromId, $adminIds)) {
             try{
                 $this->telegram->deleteMessage([
                     'chat_id' => $update->getMessage()->getChat()->getId(),
