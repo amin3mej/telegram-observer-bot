@@ -62,7 +62,7 @@ class BotHelper {
                 'chat_id' => $chatId,
                 'text' => 'Your ID is: ' . $chatId,
             ]);
-        } elseif (starts_with($text, 'help')) {
+        } elseif (starts_with($text, 'help') || starts_with($text, '/start')) {
             $this->telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => file_get_contents(base_path('responses/help.md')),
