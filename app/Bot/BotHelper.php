@@ -50,7 +50,7 @@ class BotHelper {
     public function parsePrivateText(Update $update)
     {
         $chatId = $update->getMessage()->getChat()->getId();
-        $text   = $update->getMessage()->getText();
+        $text   = str_replace('‌', '', $update->getMessage()->getText());
 
         if (starts_with($text, 'ping')) {
             $this->telegram->sendMessage([
