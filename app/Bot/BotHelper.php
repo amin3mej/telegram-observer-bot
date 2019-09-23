@@ -155,6 +155,26 @@ class BotHelper {
                     'message_id'=> $update->getMessage()->getMessageId(),
                 ]);
             }
+        }  elseif (starts_with($text, '!trjob')) {
+            if (!$isReply) return;
+            $adminIds = explode(',', env('BOT_ADMIN_IDS'));
+            $fromId = $update->getMessage()->getFrom()->getId();
+            $replySender = $update->getMessage()->getReplyToMessage()->getFrom();
+            if(in_array($fromId, $adminIds)){
+                $this->telegram->deleteMessage([
+                    'chat_id' => $update->getMessage()->getChat()->getId(),
+                    'message_id'=> $replyId,
+                ]);
+                $username = '[' . $replySender->getFirstName() . ' ' . $replySender->getLastName() . '](tg://user?id=' . $replySender->getId() . ')';
+                $path = base_path('responses/answers/trjob.md');
+                $text = file_get_contents($path);
+                $text = str_replace('{username}', $username, $text);
+                $this->telegram->sendMessage([
+                    'chat_id' => $update->getMessage()->getChat()->getId(),
+                    'parse_mode' => 'markdown',
+                    'text' => $text,
+                ]);
+            }
         } elseif (starts_with($text, '!')) {
             $command = mb_substr($text, 1);
             $command = trim($command);
