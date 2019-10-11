@@ -203,6 +203,8 @@ class BotHelper {
                     'reply_to_message_id' => $replyId,
                     'text' => file_get_contents($path),
                 ]);
+            } else {
+                $this->messageToRemove = null;
             }
         } elseif (
             strpos($text, 'اوبونتو') === false &&
@@ -219,7 +221,6 @@ class BotHelper {
             ]);
         }
     }
-
     public function parseGroupAttachment(Update $update)
     {
         $filename = $update->getMessage()->getDocument()->getFileName();
