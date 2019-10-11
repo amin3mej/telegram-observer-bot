@@ -13,10 +13,26 @@ use Telegram\Bot\Objects\Update;
 class BotHelper {
 
     private $telegram;
+    private $messageToRemove = null;
 
     public function __construct($telegram)
     {
         $this->telegram = $telegram;
+    }
+
+    public function __destruct()
+    {
+        if ($this->messageToRemove)
+        {
+            try {
+                $this->telegram->deleteMessage([
+                    'chat_id' => $this->messageToRemove->getChat()->getId(),
+                    'message_id' => $this->messageToRemove->getMessageId(),
+                ]);
+            } catch (\Exception $exception) {
+
+            }
+        }
     }
 
     public function parse(Update $update)
@@ -87,8 +103,7 @@ class BotHelper {
 
     public function parseGroupText(Update $update)
     {
-        $text = $update->getMessage()->getText();
-
+        $text = $this->autoRemoveChecker($update);
         $isReply = is_object($update->getMessage()->getReplyToMessage());
         $replyId = $isReply ? $update->getMessage()->getReplyToMessage()->getMessageId() : $update->getMessage()->getMessageId();
 
@@ -231,7 +246,6 @@ class BotHelper {
         }
     }
 
-
     public function parseGroupEvents(Update $update)
     {
         if(isset($update->getMessage()['left_chat_member'])){
@@ -285,5 +299,15 @@ class BotHelper {
                 }
             }
         }
+    }
+
+    private function autoRemoveChecker(Update $update)
+    {
+        $text = $update->getMessage()->getText();
+        if (starts_with($text, '!!')) {
+            $this->messageToRemove = $update->getMessage();
+            return mb_substr($text, 1);
+        }
+        return $text;
     }
 }
