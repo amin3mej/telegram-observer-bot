@@ -44,7 +44,6 @@ class BotHelper {
         $messageType = $this->telegram->detectMessageType($update);
         $isInPrivate = $update->getMessage()->getChat()->getType() === 'private';
         $isInGroup = $update->getMessage()->getChat()->getType() === 'supergroup'; 
-        // $isInGroup = $update->getMessage()->getChat()->getId() == env('BOT_GROUP_ID');
 
         if($isInPrivate){
             if ($messageType == 'text') {
@@ -115,8 +114,9 @@ class BotHelper {
         }
 
         if (starts_with($text, '!report')) {
-            $ids = explode(',', env('BOT_ADMIN_IDS'));
-            foreach ($ids as $id) {
+            $fromChatId = $update->getMessage()->getChat()->getId();
+            $adminIds = $this->getAdminIdList($fromChatId);
+            foreach ($adminIds as $id) {
                 try {
                     $this->telegram->forwardMessage([
                         'chat_id' => $id,
@@ -155,9 +155,7 @@ class BotHelper {
                 ]);
             }
         } elseif (starts_with($text, '!remove')) {
-            $adminIds = explode(',', env('BOT_ADMIN_IDS'));
-            $fromId = $update->getMessage()->getFrom()->getId();
-            if(in_array($fromId, $adminIds)){
+            if($this->isAdmin($update)){
                 if($isReply)
                 {
                     $this->telegram->deleteMessage([
@@ -172,10 +170,8 @@ class BotHelper {
             }
         }  elseif (starts_with($text, '!trjob')) {
             if (!$isReply) return;
-            $adminIds = explode(',', env('BOT_ADMIN_IDS'));
-            $fromId = $update->getMessage()->getFrom()->getId();
             $replySender = $update->getMessage()->getReplyToMessage()->getFrom();
-            if(in_array($fromId, $adminIds)){
+            if($this->isAdmin($update)){
                 $this->telegram->deleteMessage([
                     'chat_id' => $update->getMessage()->getChat()->getId(),
                     'message_id'=> $replyId,
@@ -224,10 +220,8 @@ class BotHelper {
     public function parseGroupAttachment(Update $update)
     {
         $filename = $update->getMessage()->getDocument()->getFileName();
-        $adminIds = explode(',', env('BOT_ADMIN_IDS'));
-        $fromId = $update->getMessage()->getFrom()->getId();
         
-        if (substr($filename, -4) === '.apk' && ! in_array($fromId, $adminIds)) {
+        if (substr($filename, -4) === '.apk' && !$this->isAdmin($update)) {
             try{
                 $this->telegram->deleteMessage([
                     'chat_id' => $update->getMessage()->getChat()->getId(),
@@ -310,5 +304,21 @@ class BotHelper {
             return mb_substr($text, 1);
         }
         return $text;
+    }
+
+    private function getAdminIdList($groupID){
+        return Cache::remember('admin-list-' . $groupID, 24 * 60 * 60, function () use ($groupID) {
+            $result = $this->telegram->getChatAdministrators([
+                'chat_id' => $groupID,
+            ]);
+            return collect($result['result'])->pluck('user.id')->all();
+        });
+
+        return [];
+    }
+
+    private function isAdmin(Update $update) {
+        $fromId = $update->getMessage()->getFrom()->getId();
+        return in_array($fromId, $this->getAdminIdList($update->getMessage()->getChat()->getId()));
     }
 }

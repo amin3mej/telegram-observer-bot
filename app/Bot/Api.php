@@ -70,7 +70,13 @@ class Api extends \Telegram\Bot\Api
         $response = $this->post('restrictChatMember', $params);
 
         return $response->getDecodedBody();
+    }
 
+    public function getChatAdministrators(array $params)
+    {
+        $response = $this->post('getChatAdministrators', $params);
+
+        return $response->getDecodedBody();
     }
 
 }
