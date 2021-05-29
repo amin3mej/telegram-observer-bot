@@ -3,6 +3,10 @@ namespace App\Bot;
 
 class Api extends \Telegram\Bot\Api
 {
+    function getDecodedResponseBody($action, array $params)
+    {
+        return $this->post($action, $params)->getDecodedBody();
+    }
     /**
      * Send text messages.
      *
@@ -24,9 +28,7 @@ class Api extends \Telegram\Bot\Api
      */
     public function deleteMessage(array $params)
     {
-        $response = $this->post('deleteMessage', $params);
-
-        return $response->getDecodedBody();
+        return getDecodedResponseBody('deleteMessage', $params);
     }
 
 
@@ -53,30 +55,22 @@ class Api extends \Telegram\Bot\Api
      */
     public function kickChatMember(array $params)
     {
-        $response = $this->post('kickChatMember', $params);
-
-        return $response->getDecodedBody();
+        return getDecodedResponseBody('kickChatMember', $params);
     }
 
     public function exportChatInviteLink(array $params)
     {
-        $response = $this->post('exportChatInviteLink', $params);
-
-        return $response->getDecodedBody();
+        return getDecodedResponseBody('exportChatInviteLink', $params);
     }
 
     public function restrictChatMember(array $params)
     {
-        $response = $this->post('restrictChatMember', $params);
-
-        return $response->getDecodedBody();
+        return getDecodedResponseBody('restrictChatMember', $params);
     }
 
     public function getChatAdministrators(array $params)
     {
-        $response = $this->post('getChatAdministrators', $params);
-
-        return $response->getDecodedBody();
+        return getDecodedResponseBody('getChatAdministrators', $params);
     }
 
 }
