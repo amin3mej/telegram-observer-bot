@@ -132,10 +132,13 @@ class BotHelper {
 
                 }
             }
-            $this->telegram->deleteMessage([
+
+            $this->telegram->sendMessage([
                 'chat_id' => $update->getMessage()->getChat()->getId(),
-                'message_id' => $update->getMessage()->getMessageId(),
+                'reply_to_message_id' => $replyId,
+                'text' => "پیام به مدیران گزارش شد.",
             ]);
+
         } elseif (starts_with($text, '!link')) {
             $link = Cache::remember('joinLinkFor' . $update->getMessage()->getChat()->getId(), 180, function () use ($update) {
                 $link = $this->telegram->exportChatInviteLink([
